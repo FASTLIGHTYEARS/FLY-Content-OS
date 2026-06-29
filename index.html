@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="FLY OS"/>
+<meta name="theme-color" content="#06060E"/>
+<title>FLY Content OS · Operator Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+
+<script>
+(function(){
+  /* ── embedded PWA icon (gold rocket on void) ── */
+  var icon = "data:image/svg+xml;base64," + btoa(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#06060E"/><circle cx="390" cy="122" r="180" fill="#0B1F4D" opacity=".55"/><text x="256" y="300" font-family="serif" font-size="220" font-weight="700" fill="#C9A84C" text-anchor="middle">FLY</text><rect x="96" y="348" width="320" height="2" fill="#C9A84C" opacity=".4"/><text x="256" y="400" font-family="monospace" font-size="48" fill="#7B9BBE" text-anchor="middle" letter-spacing="8">CONTENT OS</text></svg>`);
+  var manifest = {
+    name:"FLY Content OS · Operator Edition",
+    short_name:"FLY OS",
+    description:"Daily & Weekly Execution Architecture for a Working Founder",
+    start_url:".",
+    display:"standalone",
+    orientation:"portrait-primary",
+    background_color:"#06060E",
+    theme_color:"#06060E",
+    icons:[
+      {src:icon,sizes:"192x192",type:"image/svg+xml",purpose:"any maskable"},
+      {src:icon,sizes:"512x512",type:"image/svg+xml",purpose:"any maskable"}
+    ]
+  };
+  var blob = new Blob([JSON.stringify(manifest)],{type:"application/manifest+json"});
+  var link = document.createElement("link");
+  link.rel="manifest"; link.href=URL.createObjectURL(blob);
+  document.head.appendChild(link);
+  var icon192 = document.createElement("link");
+  icon192.rel="apple-touch-icon"; icon192.href=icon;
+  document.head.appendChild(icon192);
+})();
+</script>
+
+<style>
+:root{
+  --void:#06060E;
+  --sd:#091C40;
+  --s:#0B1F4D;
+  --s2:#152E66;
+  --s3:#1C3F80;
+  --sb:#1E3A6E;
+  --g:#C9A84C;
+  --gl:#E0BD72;
+  --gd:#7A6128;
+  --pl:#EAF0F7;
+  --wh:#FFFFFF;
+  --cy:#27C7E0;
+  --sl:#7B9BBE;
+  --gr:#606076;
+  --grl:#9494A8;
+  --red:#C0392B;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{height:-webkit-fill-available}
+html,body{
+  width:100%;min-height:100%;overflow:hidden;
+  background:var(--void);
+  font-family:'DM Sans',sans-serif;
+  color:var(--pl);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── DECK ── */
+.deck{position:relative;width:100%;height:100vh;height:100dvh;overflow:hidden;background:var(--void)}
+.slide{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  background:var(--void);opacity:0;transform:translateX(52px);
+  transition:opacity .48s cubic-bezier(.4,0,.2,1),transform .48s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;will-change:opacity,transform;
+}
+.slide.active{opacity:1;transform:none;pointer-events:all;z-index:2}
+.slide.exit{opacity:0;transform:translateX(-52px);z-index:1}
+
+/* ── NAV ── */
+.nav-dots{position:fixed;right:16px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:300}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--gr);cursor:pointer;transition:all .28s}
+.dot.on{background:var(--g);box-shadow:0 0 8px var(--g);transform:scale(1.75)}
+.nav-bot{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:300}
+.nbtn{width:44px;height:44px;border:1px solid var(--gd);background:rgba(6,6,14,.94);color:var(--g);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(8px);font-family:inherit;border-radius:2px}
+.nbtn:hover{border-color:var(--g);background:rgba(201,168,76,.08)}
+.ctr{position:fixed;bottom:calc(28px + env(safe-area-inset-bottom));right:50px;font-family:'Space Mono',monospace;font-size:9px;color:var(--gr);letter-spacing:.1em;z-index:300}
+
+/* ── SLIDE HEADER ── */
+.sh{padding:max(22px,env(safe-area-inset-top)) 64px 16px;border-bottom:1px solid rgba(201,168,76,.1);flex-shrink:0}
+.sh-no{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.22em;color:var(--gr);margin-bottom:4px}
+.sh-t{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:600;color:var(--wh);line-height:1;letter-spacing:-.015em}
+.sh-t .g{color:var(--g)}
+.sh-s{font-size:11px;color:var(--grl);margin-top:4px;font-weight:300}
+.sb{flex:1;padding:22px 64px 86px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+/* ── COVER ── */
+#s0{overflow:hidden;position:relative}
+.cbg{position:absolute;inset:0;pointer-events:none;z-index:0}
+.cglow{position:absolute;right:-80px;top:50%;transform:translateY(-50%);width:560px;height:560px;background:radial-gradient(circle,var(--s) 0%,var(--sd) 42%,transparent 70%);opacity:.5}
+.cline{position:absolute;right:310px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--gd) 50%,transparent);opacity:.28}
+.ccontent{flex:1;display:flex;flex-direction:column;justify-content:center;padding:64px 80px;padding-top:max(64px,calc(env(safe-area-inset-top)+44px));position:relative;z-index:1}
+.ctag{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.32em;color:var(--g);margin-bottom:36px;text-transform:uppercase}
+.crule{width:64px;height:1px;background:var(--g);margin-bottom:22px}
+.ctitle{font-family:'Cormorant Garamond',serif;font-size:88px;font-weight:700;line-height:.88;color:var(--wh);letter-spacing:-.02em;margin-bottom:4px}
+.ctitle em{font-style:italic;color:var(--g)}
+.csub{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;font-style:italic;color:var(--grl);margin-bottom:48px}
+.cmeta{display:flex;gap:40px;flex-wrap:wrap}
+.cmeta-i label{display:block;font-family:'Space Mono',monospace;font-size:7px;letter-spacing:.2em;color:var(--gr);margin-bottom:3px}
+.cmeta-i span{font-size:12px;color:var(--pl);font-weight:500}
+
+/* ── CARDS ── */
+.card{border:1px solid rgba(201,168,76,.18);background:var(--s2);border-radius:2px;padding:22px 20px;position:relative;overflow:hidden}
+.card.hi{background:var(--s3);border-color:rgba(201,168,76,.28)}
+.card-no{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:.28em;color:var(--g);margin-bottom:10px}
+.card-h{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--wh);margin-bottom:6px}
+.card-sub{font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gl);margin-bottom:12px}
+.card-body{font-size:11.5px;color:var(--grl);line-height:1.65}
+.card-tag{margin-top:14px;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;color:var(--sl)}
+
+/* ── INFO / RULE BOXES ── */
+.info-box{padding:14px 18px;border-left:2px solid var(--g);background:rgba(10,28,60,.22);margin-top:18px}
+.info-box p{font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:var(--pl);line-height:1.7}
+.rule-box{padding:12px 16px;border:1px solid rgba(255,255,255,.06);margin-top:14px}
+.rule-box p{font-size:11px;color:var(--grl);line-height:1.75}
+
+/* ── THREE COL GRID ── */
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;height:calc(100% - 4px)}
+/* ── TWO COL GRID ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+/* ── SEVEN COL GRID ── */
+.g7{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+/* ── FOUR LEVEL BUFFER GRID ── */
+.gbuf{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+/* ── THREE METRICS GRID ── */
+.gm3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+/* ── WEEK PHASE ── */
+.gphase{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+/* ── CHECKLIST FIVE COL ── */
+.gcl{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+
+/* ── DAY CARD (weekly spine) ── */
+.daycard{border:1px solid rgba(201,168,76,.14);padding:12px 9px}
+.daycard.deep{border-color:rgba(100,200,100,.32);background:rgba(10,40,20,.28)}
+.daycard .day{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:.2em;color:var(--g);margin-bottom:6px}
+.daycard .day.green{color:#6EC97A}
+.daycard .role{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--wh);margin-bottom:5px;line-height:1.2}
+.daycard .det{font-size:10px;color:var(--grl);line-height:1.55}
+
+/* ── BLOCK ITEM (Tue–Sat three blocks) ── */
+.bblock{border:1px solid rgba(201,168,76,.18);background:var(--s2);border-radius:2px;padding:22px 20px;display:flex;flex-direction:column}
+.bblock.gold{background:var(--s3);border-color:rgba(201,168,76,.32)}
+.bblock .btime-badge{display:inline-flex;align-items:center;gap:10px;margin-bottom:12px}
+.bblock .btime-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--g);background:rgba(6,6,14,.7);border:1px solid var(--gd);padding:4px 12px;border-radius:2px}
+.bblock .bdur{font-family:'Space Mono',monospace;font-size:9px;color:var(--sl);letter-spacing:.1em}
+.bblock .btag-s{font-family:'Space Mono',monospace;font-size:9px;color:var(--sl);letter-spacing:.12em;margin-bottom:6px}
+.bblock .bblock-h{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--wh);margin-bottom:4px}
+.bblock .bblock-mode{font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:var(--grl);margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.05)}
+.bblock .mandate-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.18em;color:var(--cy);margin-bottom:6px}
+.bblock .mandate-text{font-size:11.5px;color:var(--pl);line-height:1.65;margin-bottom:12px}
+.bblock .not-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.18em;color:var(--gr);margin-bottom:5px;border-top:1px solid rgba(255,255,255,.05);padding-top:12px}
+.blist{list-style:none;display:flex;flex-direction:column;gap:5px}
+.blist li{font-size:11px;color:var(--grl);padding-left:14px;position:relative;line-height:1.5}
+.blist li::before{content:'×';position:absolute;left:0;color:var(--gr);font-size:9px;top:2px}
+.bblock .benergy{font-family:'Cormorant Garamond',serif;font-size:12px;font-style:italic;margin-top:12px}
+
+/* ── BUFFER LEVEL CARD ── */
+.bflevel{border:1px solid rgba(201,168,76,.18);background:var(--s2);border-radius:2px;padding:20px 16px;text-align:center}
+.bflevel.crit{background:rgba(45,10,10,.5);border-color:rgba(192,57,43,.4)}
+.bflevel .bfn{font-family:'Cormorant Garamond',serif;font-size:54px;font-weight:700;line-height:1}
+.bflevel .bfpkg{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.2em;color:var(--gr);margin:4px 0}
+.bflevel .bflabel{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.18em;font-weight:700;margin-bottom:10px}
+.bflevel .bfdesc{font-size:10.5px;color:var(--grl);line-height:1.6}
+.bflevel hr{border:none;border-top:1px solid rgba(255,255,255,.06);margin:10px 0}
+
+/* ── METRICS ── */
+.mcard{border:1px solid rgba(201,168,76,.15);background:var(--s2);border-radius:2px;padding:18px 16px}
+.mcard.gold{background:var(--s3);border-color:rgba(201,168,76,.28)}
+.mcard .mwhen{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--cy);margin-bottom:12px;line-height:1.2}
+.mcard.gold .mwhen{color:var(--gl)}
+.mcard hr{border:none;border-top:1px solid rgba(255,255,255,.06);margin:8px 0}
+.mitem{margin-bottom:9px}
+.mitem .ml{font-size:12px;color:var(--pl);font-weight:500}
+.mitem .md{font-size:10.5px;color:var(--grl);line-height:1.5}
+
+/* ── PHASE CARDS ── */
+.phcard{border:1px solid rgba(201,168,76,.14);background:var(--s2);border-radius:2px;padding:18px 16px}
+.phcard.hi{background:var(--s3);border-color:rgba(201,168,76,.32)}
+.phcard .phwk{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:.18em;color:var(--g);margin-bottom:6px}
+.phcard .phn{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--wh);margin-bottom:6px}
+.phcard .phd{font-size:11px;color:var(--grl);line-height:1.65}
+
+/* ── CHECKLIST CARD ── */
+.clcard{border:1px solid rgba(201,168,76,.14);background:var(--s2);border-radius:2px;padding:14px 12px}
+.clcard.gold{background:var(--s3);border-color:rgba(201,168,76,.32)}
+.clcard .clday{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--wh);margin-bottom:3px;line-height:1.1}
+.clcard .clsub{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:.15em;color:var(--g);margin-bottom:8px}
+.clcard hr{border:none;border-top:1px solid rgba(255,255,255,.06);margin:7px 0}
+.clcard ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+.clcard li{font-size:10px;color:var(--pl);padding-left:13px;position:relative;line-height:1.45}
+.clcard li::before{content:'□';position:absolute;left:0;color:var(--g);font-size:8px;top:1px}
+
+/* ── AGENT TABLE ── */
+.agtable{width:100%;border-collapse:collapse}
+.agtable thead tr{border-bottom:1px solid rgba(201,168,76,.2)}
+.agtable th{text-align:left;padding:8px 16px;font-family:'Space Mono',monospace;font-size:7px;letter-spacing:.2em;color:var(--g)}
+.agtable td{padding:14px 16px;vertical-align:top;border-bottom:1px solid rgba(255,255,255,.04);font-size:11.5px}
+.agtable tr:last-child td{border-bottom:none}
+.agname{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--wh)}
+.aglayer{font-size:10px;color:var(--sl);margin-top:2px}
+.agbadge{display:inline-block;font-family:'Space Mono',monospace;font-size:7px;letter-spacing:.1em;padding:2px 8px;border:1px solid var(--sb);color:var(--cy);margin-left:8px;vertical-align:middle}
+.agwhen{font-size:10px;color:var(--g);font-style:italic}
+.agdesc{color:var(--grl);line-height:1.65}
+
+/* ── REPURPOSE CHAIN ── */
+.rchain{display:flex;flex-direction:column;gap:0}
+.rchain-item{display:flex;align-items:center;gap:12px;padding:8px 0}
+.rchain-item:not(:last-child){border-bottom:1px solid rgba(255,255,255,.04)}
+.rchain-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.rchain-item .rn{font-size:13.5px;color:var(--pl)}
+.rchain-item.seed .rn{color:var(--g);font-weight:600}
+.rchain-item.end .rn{color:var(--gl);font-weight:600}
+
+/* ── UTILITY ── */
+.eyebrow{font-family:'Space Mono',monospace;font-size:7px;letter-spacing:.24em;color:var(--g);margin-bottom:10px;text-transform:uppercase}
+.g{color:var(--g)}
+.cy{color:var(--cy)}
+.sl{color:var(--sl)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .ccontent{padding:36px 24px;padding-top:max(36px,calc(env(safe-area-inset-top)+24px))}
+  .ctitle{font-size:56px}
+  .sh{padding:max(18px,env(safe-area-inset-top)) 24px 12px}
+  .sb{padding:16px 24px 84px}
+  .sh-t{font-size:28px}
+  .g3{grid-template-columns:1fr}
+  .g2{grid-template-columns:1fr}
+  .g7{grid-template-columns:repeat(4,1fr)}
+  .gbuf{grid-template-columns:repeat(2,1fr)}
+  .gm3{grid-template-columns:1fr}
+  .gphase{grid-template-columns:repeat(2,1fr)}
+  .gcl{grid-template-columns:repeat(3,1fr)}
+  .cmeta{gap:18px}
+  .nav-dots{right:8px}
+}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<!-- ══════════════════════════════════════════
+     S1 · COVER
+══════════════════════════════════════════ -->
+<div class="slide active" id="s0">
+  <div class="cbg"><div class="cglow"></div><div class="cline"></div></div>
+  <div class="ccontent">
+    <div class="ctag">IAMFLY · CONTENT OS · CONSTRAINED OPERATOR EDITION · 2026</div>
+    <div class="crule"></div>
+    <div class="ctitle">FLY<br/><em>Content OS</em></div>
+    <div class="csub">Daily & Weekly Execution for a Working Founder</div>
+    <div class="cmeta">
+      <div class="cmeta-i"><label>SPRINT</label><span>5–6 scripts Sun + Mon</span></div>
+      <div class="cmeta-i"><label>PUBLISH</label><span>7 days / week</span></div>
+      <div class="cmeta-i"><label>BUFFER</label><span>3-package floor · always</span></div>
+      <div class="cmeta-i"><label>SLIDES</label><span>12 · Operator Reference</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S2 · OPERATING REALITY
+══════════════════════════════════════════ -->
+<div class="slide" id="s1">
+  <div class="sh">
+    <div class="sh-no">02 / 12 · THE CONSTRAINT</div>
+    <div class="sh-t">Design <span class="g">around</span> the constraint,<br/>not against it.</div>
+    <div class="sh-s">The day job is a fact. The system must survive it — not pretend it doesn't exist.</div>
+  </div>
+  <div class="sb">
+    <div class="g3" style="height:auto;gap:14px">
+      <div class="card hi" style="border-color:rgba(100,200,100,.35);background:rgba(10,40,20,.35)">
+        <div class="card-no">SUN + MON · DEEP SPRINT</div>
+        <div class="card-h" style="color:#6EC97A">The Engine</div>
+        <div class="card-body">Uninterrupted. No W-2 interference. This is the entire weekly creation engine. 5–6 Layer 1 scripts captured across two days. Protect these days like capital — everything downstream depends on them.</div>
+        <div class="card-tag" style="color:#6EC97A">◆ LOAD-BEARING · NON-NEGOTIABLE</div>
+      </div>
+      <div class="card">
+        <div class="card-no">TUE–SAT · THREE BLOCKS</div>
+        <div class="card-h">Constrained Execution</div>
+        <div class="card-body">Pre-04:00 (1 hr) · 11:00–noon (1 hr) · post-16:45. Each block has one mandate. Agent-assisted. Low cognitive load by design. Creation and publishing are fully decoupled — you never create under clock pressure on these days.</div>
+        <div class="card-tag">◈ OPERATOR MODE · SINGLE MANDATE PER BLOCK</div>
+      </div>
+      <div class="card hi">
+        <div class="card-no">ALWAYS ACTIVE · ANTIFRAGILITY</div>
+        <div class="card-h">3-Package Buffer</div>
+        <div class="card-body">Sprint runs 2+ days ahead of publish at all times. Missed sprint? Publish from queue. No guilt. No streak break. The buffer is not a nice-to-have — it is the system's immune response to a demanding day job.</div>
+        <div class="card-tag">▲ MINIMUM FLOOR · NEVER BELOW 3</div>
+      </div>
+    </div>
+    <div class="info-box" style="margin-top:16px">
+      <p>"Sprint Sunday. Load Monday. Publish daily. Buffer never below 3." — The four operating laws. Everything else is execution detail.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S3 · WEEKLY SPINE
+══════════════════════════════════════════ -->
+<div class="slide" id="s2">
+  <div class="sh">
+    <div class="sh-no">03 / 12 · WEEKLY RHYTHM</div>
+    <div class="sh-t">Every week runs the <span class="g">same spine.</span></div>
+    <div class="sh-s">Creation and publishing are fully decoupled. Sprint fills the buffer. Buffer feeds the world.</div>
+  </div>
+  <div class="sb">
+    <div class="g7" style="margin-bottom:16px">
+      <div class="daycard deep">
+        <div class="day green">SUN ◆</div>
+        <div class="role">Sprint Day 1</div>
+        <div class="det">Batch-capture 3 scripts. Set Dossier arc. Seed queue for Mon.</div>
+      </div>
+      <div class="daycard deep">
+        <div class="day green">MON ◆</div>
+        <div class="role">Sprint Day 2</div>
+        <div class="det">2–3 more scripts. Full Atomizer run. Buffer = 5–6. Week is armed.</div>
+      </div>
+      <div class="daycard">
+        <div class="day">TUE</div>
+        <div class="role">Publish + Refine</div>
+        <div class="det">Day 1 from buffer. Pre-04:00: QA. Noon: tag + log. Eve: release.</div>
+      </div>
+      <div class="daycard">
+        <div class="day">WED</div>
+        <div class="role">Publish + Refine</div>
+        <div class="det">Day 2. Same rhythm. Pre-04:00: seed or quality pass.</div>
+      </div>
+      <div class="daycard">
+        <div class="day">THU</div>
+        <div class="role">Publish + Check</div>
+        <div class="det">Day 3. Noon: hook hold, save rate, comment rate.</div>
+      </div>
+      <div class="daycard">
+        <div class="day">FRI</div>
+        <div class="role">Publish + Review</div>
+        <div class="det">Day 4. Eve: analytics review. Lessons into next arc.</div>
+      </div>
+      <div class="daycard">
+        <div class="day">SAT</div>
+        <div class="role">Publish + Seed</div>
+        <div class="det">Day 5. Capture seed bank for next Sun sprint. Buffer confirmed.</div>
+      </div>
+    </div>
+    <div class="rule-box">
+      <p>◆ Sunday and Monday carry all creative load. Tue–Sat operate on three single-mandate blocks. The asymmetry is the design — not a compromise. Sprint days produce. Constrained days execute. The buffer eliminates the dependency between them.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S4 · SUNDAY
+══════════════════════════════════════════ -->
+<div class="slide" id="s3">
+  <div class="sh">
+    <div class="sh-no">04 / 12 · SUNDAY · SPRINT DAY 1</div>
+    <div class="sh-t" style="font-size:36px">Sunday is <span class="g">the engine.</span></div>
+    <div class="sh-s">This single day sets the creative inventory for the entire week. Nothing else competes for it.</div>
+  </div>
+  <div class="sb">
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
+
+      <div class="card hi">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+          <div>
+            <div class="eyebrow">ARCHITECTURE SET · OPEN</div>
+            <div class="card-h">Set the Dossier Arc</div>
+          </div>
+          <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--g);border:1px solid var(--gd);padding:3px 10px;white-space:nowrap">OPEN</div>
+        </div>
+        <div class="card-body">Open the week's Flight Dossier. Pick primary pillar + 6 supporting frameworks. Draft the Mon→Wknd narrative arc — Mission → Act I → Act II → Act III → Resolution → Next-Season Teaser. Name every day's hook angle. The week is decided before a single word is written.</div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+          <div>
+            <div class="eyebrow">BATCH CAPTURE · DEEP</div>
+            <div class="card-h">Write 3 Layer 1 Scripts</div>
+          </div>
+          <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--cy);border:1px solid rgba(39,199,224,.3);padding:3px 10px;white-space:nowrap">DEEP</div>
+        </div>
+        <div class="card-body">Hook · Script · On-Screen Text · Viral Caption · Pinned Comment — for each of three Jolts. One Jolt per sitting, back-to-back while in flow. Do not atomize, tag, or schedule. Pure creation only. The moment you switch to editing mode, creation output drops by ~60%.</div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+          <div>
+            <div class="eyebrow">SEED CAPTURE · CLOSE</div>
+            <div class="card-h">Load Monday's Queue</div>
+          </div>
+          <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--cy);border:1px solid rgba(39,199,224,.3);padding:3px 10px;white-space:nowrap">CLOSE</div>
+        </div>
+        <div class="card-body">Log 2–3 hook angles or concept seeds for Monday's sprint into the buffer queue. Brief the Content Atomizer on Sunday's scripts — it's ready to run Monday morning without a manual handoff.</div>
+      </div>
+
+    </div>
+    <div class="rule-box">
+      <p style="color:var(--g);font-weight:600">RULE &nbsp;·&nbsp; <span style="color:var(--pl);font-weight:400">Sunday ends with ≥ 3 scripts queued and the week's arc locked. If neither is true, Monday's sprint absorbs the gap — not the constrained Tue–Sat blocks.</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S5 · MONDAY
+══════════════════════════════════════════ -->
+<div class="slide" id="s4">
+  <div class="sh">
+    <div class="sh-no">05 / 12 · MONDAY · SPRINT DAY 2</div>
+    <div class="sh-t" style="font-size:36px">Monday <span class="g">locks the buffer.</span></div>
+    <div class="sh-s">By end of Monday, the queue holds 5–6 packages — enough to run 7 days at 1/day with a surplus.</div>
+  </div>
+  <div class="sb">
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+          <div>
+            <div class="eyebrow">BATCH CAPTURE 2 · DEEP</div>
+            <div class="card-h">Write 2–3 Additional Layer 1 Scripts</div>
+          </div>
+          <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--cy);border:1px solid rgba(39,199,224,.3);padding:3px 10px">DEEP</div>
+        </div>
+        <div class="card-body">Use Sunday's seeds. Same rules — Hook · Script · On-Screen · Caption · Pinned Comment. No atomizing mid-session. No switching to review. Stay in creation mode until the last script is done. Context-switching during capture costs roughly 20 minutes of re-entry per switch.</div>
+      </div>
+
+      <div class="card hi">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+          <div>
+            <div class="eyebrow">FULL ATOMIZER RUN · AGENT</div>
+            <div class="card-h">Expand Sunday's Scripts → Layers 2–4</div>
+          </div>
+          <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--g);border:1px solid var(--gd);padding:3px 10px">AGENT</div>
+        </div>
+        <div class="card-body">Content Atomizer ingests all Sunday scripts → expands: X Thread · Shorts Titles · IG/LinkedIn variants · Hashtags · SEO cluster · Metadata · Topic cluster · Audience intent · Mental model assignment · CTA strategy. You QA voice and framework clarity only — not a rewrite session.</div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+          <div>
+            <div class="eyebrow">BUFFER LOAD + RELEASE · PIPELINE</div>
+            <div class="card-h">Schedule, Log, Arm</div>
+          </div>
+          <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--sl);border:1px solid rgba(123,155,190,.28);padding:3px 10px">PIPELINE</div>
+        </div>
+        <div class="card-body">Release Pipeline schedules all cleared packages: platform-correct formatting, publish-time optimization, automated release. FLY Archive entries created. Buffer count confirmed ≥ 5. The week is armed — Tuesday's first publish pulls from queue with zero creation required.</div>
+      </div>
+
+    </div>
+    <div class="rule-box">
+      <p style="color:var(--g);font-weight:600">TARGET &nbsp;·&nbsp; <span style="color:var(--pl);font-weight:400">Mon closes with buffer ≥ 5 packages, all atomized and scheduled. If it closes at 4, flag it. If it closes at 3, Sunday's sprint expands next cycle. Never carry less than 3 into Tuesday.</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S6 · TUE–SAT THREE BLOCKS
+══════════════════════════════════════════ -->
+<div class="slide" id="s5">
+  <div class="sh">
+    <div class="sh-no">06 / 12 · TUE–SAT · CONSTRAINED EXECUTION</div>
+    <div class="sh-t">Three blocks.<br/><span class="g">One job each.</span></div>
+    <div class="sh-s">Fragmented time works when every block knows exactly its lane. No scope creep.</div>
+  </div>
+  <div class="sb">
+    <div class="g3" style="height:auto">
+
+      <div class="bblock">
+        <div class="btime-badge">
+          <div class="btime-label">PRE-04:00</div>
+          <div class="bdur">1 HOUR</div>
+        </div>
+        <div class="btag-s">CREATION / QA</div>
+        <div class="bblock-h">Sharpen</div>
+        <div class="bblock-mode">Sharpest cognitive window of the constrained day. Protect it from everything.</div>
+        <div class="mandate-label">MANDATE</div>
+        <div class="mandate-text">QA pass on 1–2 atomized packages before they publish. Confirm voice, hook strength, mental-model clarity. Optionally: 1 additional Layer 1 seed if buffer is below 3 packages.</div>
+        <div class="not-label">NOT IN THIS BLOCK</div>
+        <ul class="blist">
+          <li>Do not check analytics</li>
+          <li>Do not schedule or post</li>
+          <li>Do not bleed day-job tasks in</li>
+        </ul>
+        <div class="benergy" style="color:var(--cy)">Sharp. Protect it.</div>
+      </div>
+
+      <div class="bblock">
+        <div class="btime-badge">
+          <div class="btime-label">11:00–NOON</div>
+          <div class="bdur">1 HOUR</div>
+        </div>
+        <div class="btag-s">AGENT SHIFT</div>
+        <div class="bblock-h">Review</div>
+        <div class="bblock-mode">Energy is fragmented. Work with it — not against it. Agents do the heavy lift here.</div>
+        <div class="mandate-label">MANDATE</div>
+        <div class="mandate-text">Atomizer expands any un-atomized scripts. You review Layers 2–4 — SEO pass, content graph tag (Pillar · Series · Episode · Next), IP extraction flag. Low creative load by design.</div>
+        <div class="not-label">NOT IN THIS BLOCK</div>
+        <ul class="blist">
+          <li>Do not write new scripts</li>
+          <li>Do not deep-read analytics</li>
+          <li>Do not start new creative directions</li>
+        </ul>
+        <div class="benergy" style="color:var(--cy)">Fragmented. Work with it.</div>
+      </div>
+
+      <div class="bblock gold">
+        <div class="btime-badge">
+          <div class="btime-label" style="border-color:var(--g);color:var(--g)">POST-16:45</div>
+          <div class="bdur" style="color:var(--gl)">VARIABLE</div>
+        </div>
+        <div class="btag-s" style="color:var(--gl)">RELEASE + LOG</div>
+        <div class="bblock-h">Ship</div>
+        <div class="bblock-mode">End of day. Admin-only. Stop when the log is done.</div>
+        <div class="mandate-label" style="color:var(--gl)">MANDATE</div>
+        <div class="mandate-text">Confirm today's publish went live. Update FLY Archive entry. Capture ≥ 1 seed for next sprint. Check buffer count — flag if below 3 for Sunday expansion.</div>
+        <div class="not-label">NOT IN THIS BLOCK</div>
+        <ul class="blist">
+          <li>Do not create</li>
+          <li>Do not atomize</li>
+          <li>Stop when the log is complete</li>
+        </ul>
+        <div class="benergy" style="color:var(--gl)">Depleted. Admin only.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S7 · AGENT OWNERSHIP
+══════════════════════════════════════════ -->
+<div class="slide" id="s6">
+  <div class="sh">
+    <div class="sh-no">07 / 12 · FLY AGENT OS</div>
+    <div class="sh-t">Who owns <span class="g">each handoff.</span></div>
+    <div class="sh-s">You are the irreplaceable creative layer. Agents own everything downstream. Never blur that line.</div>
+  </div>
+  <div class="sb">
+    <table class="agtable">
+      <thead>
+        <tr>
+          <th>AGENT</th>
+          <th>LAYER</th>
+          <th>DESCRIPTION</th>
+          <th>WHEN</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="agname">YOU <span class="agbadge">OPERATOR</span></div>
+            <div class="aglayer">Layer 1 — Creative</div>
+          </td>
+          <td><span style="color:var(--g);font-family:'Space Mono',monospace;font-size:10px">HUMAN ONLY</span></td>
+          <td><div class="agdesc">Hook · Script · On-Screen · Caption · Pinned Comment. The only layer requiring your voice, judgment, and lived experience. Cannot be delegated — this is where FLY's irreplaceable identity lives.</div></td>
+          <td><div class="agwhen">Sun + Mon sprint</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="agname">Content <span class="agbadge">ATOMIZER</span></div>
+            <div class="aglayer">Layers 2–4 — Expansion</div>
+          </td>
+          <td><span style="color:var(--cy);font-family:'Space Mono',monospace;font-size:10px">AGENT</span></td>
+          <td><div class="agdesc">X Thread · Shorts Titles (3–5) · IG/LinkedIn variants · Platform hashtags · SEO keyword cluster · Metadata package (title, thumbnail, description, tags) · Topic cluster · Audience intent · Mental model · CTA strategy.</div></td>
+          <td><div class="agwhen">Mon Atomizer run · Noon block</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="agname">You + Agent <span class="agbadge">GRAPH</span></div>
+            <div class="aglayer">Layers 5–6 — Graph + IP</div>
+          </td>
+          <td><span style="color:var(--sl);font-family:'Space Mono',monospace;font-size:10px">HYBRID</span></td>
+          <td><div class="agdesc">Content graph tagging: Pillar · Series · Episode · Prerequisite · Next · Long-form Destination. IP extraction flags: essay candidate, newsletter, podcast, book chapter, course module, lyric seed, stream segment. Quick review pass — ~5 min per package.</div></td>
+          <td><div class="agwhen">Mon close · Noon block</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="agname">Release <span class="agbadge">PIPELINE</span></div>
+            <div class="aglayer">Scheduling + Publish</div>
+          </td>
+          <td><span style="color:var(--cy);font-family:'Space Mono',monospace;font-size:10px">AGENT</span></td>
+          <td><div class="agdesc">Per-platform format optimization, publish-time scheduling, automated release. Fires from the buffer queue with no manual intervention once packages are cleared. Every channel gets the right format — never the same file copy-pasted.</div></td>
+          <td><div class="agwhen">Daily · Post-16:45</div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="agname">FLY <span class="agbadge">ARCHIVE</span></div>
+            <div class="aglayer">Logging + Compounding</div>
+          </td>
+          <td><span style="color:var(--g);font-family:'Space Mono',monospace;font-size:10px">SYSTEM</span></td>
+          <td><div class="agdesc">Records every package: date · pillar · framework · evergreen score · worldview tag · performance snapshot · repurpose status. The searchable compounding moat. In five years this is the library — not thousands of disconnected posts.</div></td>
+          <td><div class="agwhen">Daily · Post-16:45</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S8 · BUFFER PROTOCOL
+══════════════════════════════════════════ -->
+<div class="slide" id="s7">
+  <div class="sh">
+    <div class="sh-no">08 / 12 · ANTIFRAGILITY LAYER</div>
+    <div class="sh-t">The 3-Package <span class="g">Buffer Protocol.</span></div>
+    <div class="sh-s">The system doesn't punish missed windows. The buffer absorbs every disruption without breaking the streak.</div>
+  </div>
+  <div class="sb">
+    <div class="gbuf" style="margin-bottom:16px">
+
+      <div class="bflevel">
+        <div class="bfn" style="color:var(--cy)">5–6</div>
+        <div class="bfpkg">PACKAGES</div>
+        <div class="bflabel" style="color:var(--cy)">ARMED</div>
+        <hr/>
+        <div class="bfdesc">Full sprint output. 7 days covered + 1–2 day surplus. No action required. Sprint ran clean.</div>
+      </div>
+
+      <div class="bflevel" style="background:var(--s3);border-color:rgba(201,168,76,.32)">
+        <div class="bfn" style="color:var(--g)">3–4</div>
+        <div class="bfpkg">PACKAGES</div>
+        <div class="bflabel" style="color:var(--g)">NOMINAL</div>
+        <hr/>
+        <div class="bfdesc">Minimum safe buffer. Week covered. Flag for Sunday sprint to restore surplus. System is functioning.</div>
+      </div>
+
+      <div class="bflevel crit">
+        <div class="bfn" style="color:var(--red)">1–2</div>
+        <div class="bfpkg">PACKAGES</div>
+        <div class="bflabel" style="color:var(--red)">CRITICAL</div>
+        <hr/>
+        <div class="bfdesc">Sprint underperformed. Sunday is now mandatory full sprint. Publish from queue — zero creation in constrained blocks.</div>
+      </div>
+
+      <div class="bflevel" style="background:var(--s)">
+        <div class="bfn" style="color:var(--gr)">0</div>
+        <div class="bfpkg">PACKAGES</div>
+        <div class="bflabel" style="color:var(--gr)">DARK</div>
+        <hr/>
+        <div class="bfdesc">Buffer empty. Skip publish before breaking voice. Sprint next deep day. A 1-day gap costs nothing; publishing junk costs brand equity.</div>
+      </div>
+
+    </div>
+
+    <div class="card hi" style="padding:18px 20px">
+      <div class="eyebrow">BUILT-IN PERMISSION</div>
+      <div class="card-body" style="font-size:13px;color:var(--pl);line-height:1.75">If the buffer is ≥ 3 and you are exhausted — skip capture. Publish from queue. Rest. Reload Sunday. The system is designed for exactly this scenario. <strong style="color:var(--g)">Use the permission, or the system will eventually break you, which breaks the system.</strong></div>
+    </div>
+
+    <div class="rule-box" style="margin-top:12px">
+      <p>The buffer is not a productivity metric. It is a sustainability instrument. Track it every day. Not because it measures output — because it measures systemic health. A buffer trending down is a stress signal, not a failure. Respond to it early.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S9 · MEASUREMENT
+══════════════════════════════════════════ -->
+<div class="slide" id="s8">
+  <div class="sh">
+    <div class="sh-no">09 / 12 · MEASUREMENT</div>
+    <div class="sh-t">Signal, <span class="g">not noise.</span></div>
+    <div class="sh-s">Three cadences. Most analytics review is noise dressed as insight — check the right things at the right times only.</div>
+  </div>
+  <div class="sb">
+    <div class="gm3" style="margin-bottom:16px">
+
+      <div class="mcard">
+        <div class="mwhen">DAILY<br/><span style="font-size:12px;color:var(--sl)">post-16:45</span></div>
+        <hr/>
+        <div class="mitem"><div class="ml">Did it ship?</div><div class="md">Binary — yes or no. The only required daily check.</div></div>
+        <div class="mitem"><div class="ml">Hook hold</div><div class="md">3-sec view %. Trend direction only — don't obsess on single data points.</div></div>
+        <div class="mitem"><div class="ml">Buffer count</div><div class="md">≥ 3? Log it and move on. Below 3? Flag for Sunday.</div></div>
+      </div>
+
+      <div class="mcard">
+        <div class="mwhen">FRIDAY<br/><span style="font-size:12px;color:var(--sl)">analytics review</span></div>
+        <hr/>
+        <div class="mitem"><div class="ml">Top watch-time Jolt</div><div class="md">What held attention longest?</div></div>
+        <div class="mitem"><div class="ml">Highest save rate</div><div class="md">What do they want to return to?</div></div>
+        <div class="mitem"><div class="ml">Most-quoted phrase</div><div class="md">What line became their language?</div></div>
+        <div class="mitem"><div class="ml">Best hook</div><div class="md">Carry the pattern into next arc.</div></div>
+        <div class="mitem"><div class="ml">Repurpose priority</div><div class="md">Tag top performer for extraction sprint.</div></div>
+      </div>
+
+      <div class="mcard gold">
+        <div class="mwhen">EVERY 12–15 JOLTS<br/><span style="font-size:12px;color:var(--sl)">extraction trigger</span></div>
+        <hr/>
+        <div class="mitem"><div class="ml">Evergreen score avg</div><div class="md">Target 80%+ rated 10.</div></div>
+        <div class="mitem"><div class="ml">Assets extracted</div><div class="md">Essays, podcasts, chapters vs target.</div></div>
+        <div class="mitem"><div class="ml">Framework adoption</div><div class="md">Do they use your language?</div></div>
+        <div class="mitem"><div class="ml">Pillar coverage</div><div class="md">Balanced or drifting?</div></div>
+        <div class="mitem"><div class="ml">Book + course progress</div><div class="md">Chapters accumulated this cycle.</div></div>
+      </div>
+
+    </div>
+    <div class="rule-box">
+      <p>The evergreen score (10 = timeless for years · 8 = relevant 1–2 years · 6 = trend dependent · 4 = news-based) is the single most important long-term metric. Aim for 80% rated 10. Those become the book. Those become the course. Those compound for decades.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S10 · KNOWLEDGE EXTRACTION
+══════════════════════════════════════════ -->
+<div class="slide" id="s9">
+  <div class="sh">
+    <div class="sh-no">10 / 12 · THE COMPOUNDING ENGINE</div>
+    <div class="sh-t">Every 12–15 Jolts:<br/><span class="g">Extraction Sprint.</span></div>
+    <div class="sh-s">Converts social posts into books, courses, and durable IP. Runs on Sun or Mon deep days only.</div>
+  </div>
+  <div class="sb">
+    <div class="g2" style="gap:24px;margin-bottom:16px">
+
+      <div>
+        <div class="eyebrow" style="margin-bottom:12px">THE REPURPOSE CHAIN</div>
+        <div class="rchain">
+          <div class="rchain-item seed"><div class="rchain-dot" style="background:var(--g)"></div><div class="rn">Daily Jolt</div></div>
+          <div class="rchain-item"><div class="rchain-dot" style="background:var(--cy)"></div><div class="rn">X Thread</div></div>
+          <div class="rchain-item"><div class="rchain-dot" style="background:var(--cy)"></div><div class="rn">Newsletter Essay</div></div>
+          <div class="rchain-item"><div class="rchain-dot" style="background:var(--cy)"></div><div class="rn">YouTube Essay (8–15 min)</div></div>
+          <div class="rchain-item"><div class="rchain-dot" style="background:var(--cy)"></div><div class="rn">Podcast Episode (20–40 min)</div></div>
+          <div class="rchain-item"><div class="rchain-dot" style="background:var(--cy)"></div><div class="rn">Book Chapter</div></div>
+          <div class="rchain-item end"><div class="rchain-dot" style="background:var(--g)"></div><div class="rn">Course · Keynote</div></div>
+        </div>
+        <div class="rule-box" style="margin-top:12px">
+          <p>One idea becomes seven assets. The market tests which ideas hold before they cost production budget. Only proven ideas get extracted into durable IP.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="eyebrow" style="margin-bottom:12px">SPRINT DELIVERABLES</div>
+        <div class="card hi" style="padding:18px 20px">
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <div style="font-size:13px;color:var(--pl)">→ 1 YouTube essay <span style="color:var(--sl)">(8–15 min)</span></div>
+            <div style="font-size:13px;color:var(--pl)">→ 1 newsletter <span style="color:var(--sl)">(1,200–2,000 words)</span></div>
+            <div style="font-size:13px;color:var(--pl)">→ 1 podcast episode <span style="color:var(--sl)">(20–40 min)</span></div>
+            <div style="font-size:13px;color:var(--pl)">→ 1 LinkedIn article</div>
+            <div style="font-size:13px;color:var(--pl)">→ 1 Instagram carousel</div>
+            <div style="font-size:13px;color:var(--pl)">→ 1 X long-form thread</div>
+            <div style="font-size:13px;color:var(--g);font-weight:600">→ 1 chapter — The FLY Operating System</div>
+          </div>
+          <hr style="border:none;border-top:1px solid rgba(255,255,255,.07);margin:14px 0"/>
+          <div class="eyebrow" style="margin-bottom:6px">PER QUARTER</div>
+          <div style="font-size:12px;color:var(--grl);line-height:1.7">≈ 60–75 Jolts · 4–5 essays · 4 podcasts · 4 newsletters · 4–5 book chapters. Year-end: a market-tested book + flagship course — built from content that already proved itself in the market.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S11 · 12-WEEK ROLLOUT
+══════════════════════════════════════════ -->
+<div class="slide" id="s10">
+  <div class="sh">
+    <div class="sh-no">11 / 12 · ACTIVATION · CYCLE II</div>
+    <div class="sh-t">The first <span class="g">12-week rollout.</span></div>
+    <div class="sh-s">Validate by hand first. Automate only after the loop is proven. Never automate a broken process.</div>
+  </div>
+  <div class="sb">
+    <div class="gphase" style="margin-bottom:16px">
+
+      <div class="phcard">
+        <div class="phwk">WK 1–2 · VALIDATE</div>
+        <div class="phn">Run by hand</div>
+        <div class="phd">Execute the full Operator Loop manually. Ship 1 Dossier/week. Prove the cadence holds before touching any agents. The loop must survive contact with reality before it earns automation.</div>
+      </div>
+
+      <div class="phcard">
+        <div class="phwk">WK 3–6 · WIRE</div>
+        <div class="phn">Atomizer active</div>
+        <div class="phd">Hand Layer 1 → Content Atomizer for Layers 2–4. Measure time saved and voice drift risk. Keep the human QA gate. First Knowledge Extraction Sprint triggers if Jolt count ≥ 12.</div>
+      </div>
+
+      <div class="phcard">
+        <div class="phwk">WK 7–10 · PIPELINE</div>
+        <div class="phn">Release + Archive</div>
+        <div class="phd">Automate scheduling via Release Pipeline. Stand up the Notion Archive schema. Run the first full extraction sprint. Quarterly metrics review at week 10.</div>
+      </div>
+
+      <div class="phcard hi">
+        <div class="phwk">WK 11–12 · COMPOUND</div>
+        <div class="phn">Review + reset</div>
+        <div class="phd">Second extraction sprint. Full quarterly review. Lock Cycle III pillars from what the data proved — not from what felt right at the start. The data is the brief.</div>
+      </div>
+
+    </div>
+    <div class="info-box">
+      <p>"Question every requirement. Remove anything unnecessary. Simplify and optimize only what remains. Automate only after the process is validated." — The only sequence that doesn't produce a well-automated broken system.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     S12 · WEEKLY CHECKLIST
+══════════════════════════════════════════ -->
+<div class="slide" id="s11">
+  <div class="sh">
+    <div class="sh-no">12 / 12 · OPERATIONAL REFERENCE · PIN THIS</div>
+    <div class="sh-t">Weekly <span class="g">checklist.</span></div>
+    <div class="sh-s">The operating standard in one view — open this on Sunday morning before anything else.</div>
+  </div>
+  <div class="sb">
+    <div class="gcl" style="margin-bottom:12px">
+
+      <div class="clcard gold">
+        <div class="clday">SUN</div>
+        <div class="clsub">SPRINT DAY 1</div>
+        <hr/>
+        <ul>
+          <li>Dossier arc locked</li>
+          <li>Pillar + 6 frameworks set</li>
+          <li>Mon→Wknd hook angles named</li>
+          <li>3 Layer 1 scripts captured</li>
+          <li>Seeds queued for Monday</li>
+          <li>Atomizer briefed</li>
+        </ul>
+      </div>
+
+      <div class="clcard gold">
+        <div class="clday">MON</div>
+        <div class="clsub">SPRINT DAY 2</div>
+        <hr/>
+        <ul>
+          <li>2–3 additional scripts captured</li>
+          <li>Full Atomizer run on Sun scripts</li>
+          <li>QA pass — voice + model</li>
+          <li>Layers 5–6 tagged</li>
+          <li>Buffer → Release Pipeline</li>
+          <li>Buffer count confirmed ≥ 5</li>
+          <li>Archive entries created</li>
+        </ul>
+      </div>
+
+      <div class="clcard">
+        <div class="clday">TUE–FRI</div>
+        <div class="clsub">CONSTRAINED BLOCKS</div>
+        <hr/>
+        <ul>
+          <li>Pre-04:00: QA 1–2 packages</li>
+          <li>Or 1 seed if buffer &lt; 3</li>
+          <li>Noon: review pass + tag</li>
+          <li>Post-16:45: confirm publish</li>
+          <li>Archive log updated</li>
+          <li>1 seed captured</li>
+          <li>Buffer count checked</li>
+        </ul>
+      </div>
+
+      <div class="clcard">
+        <div class="clday">SAT</div>
+        <div class="clsub">CLOSE + RELOAD</div>
+        <hr/>
+        <ul>
+          <li>Same three constrained blocks</li>
+          <li>Seed bank built for Sun sprint</li>
+          <li>Extraction trigger checked</li>
+          <li>Jolt count ≥ 12 → flag sprint</li>
+          <li>Next week buffer confirmed</li>
+          <li>Week closed</li>
+        </ul>
+      </div>
+
+      <div class="clcard" style="border-color:rgba(201,168,76,.3);background:rgba(10,28,60,.15)">
+        <div class="clday" style="color:var(--gl)">BUFFER</div>
+        <div class="clsub" style="color:var(--g)">PROTOCOL</div>
+        <hr/>
+        <ul>
+          <li style="color:var(--cy)">5–6 → ARMED ✓</li>
+          <li style="color:var(--g)">3–4 → NOMINAL</li>
+          <li style="color:#E07070">1–2 → CRITICAL</li>
+          <li style="color:var(--gr)">0 → skip publish</li>
+          <li style="color:var(--g)">≥ 3 + exhausted</li>
+          <li style="color:var(--grl)">→ rest · no guilt</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="rule-box">
+      <p style="color:var(--g);font-weight:600;font-size:13px">THE OPERATING STANDARD &nbsp;·&nbsp; <span style="color:var(--pl);font-weight:400">Sprint Sunday. Load Monday. Publish daily. Buffer never below 3. Creation and publishing are decoupled. Agents own expansion and release. You own the voice. The archive compounds everything. <em style="color:var(--g)">Built deliberately. Compound relentlessly. Going solar. FLY. Ascend to space.</em></span></p>
+    </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- ── NAV ── -->
+<div class="nav-dots" id="dots"></div>
+<div class="nav-bot">
+  <button class="nbtn" id="prev">←</button>
+  <button class="nbtn" id="next">→</button>
+</div>
+<div class="ctr" id="ctr"></div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total  = slides.length;
+let current  = 0;
+
+// build dots
+const dotsEl = document.getElementById('dots');
+slides.forEach((_,i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i===0?' on':'');
+  d.addEventListener('click', () => go(i));
+  dotsEl.appendChild(d);
+});
+const dots = document.querySelectorAll('.dot');
+
+function update() {
+  dots.forEach((d,i) => d.classList.toggle('on', i===current));
+  document.getElementById('ctr').textContent =
+    String(current+1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+}
+
+function go(to) {
+  if (to===current || to<0 || to>=total) return;
+  const from = current;
+  slides[from].classList.remove('active');
+  slides[from].classList.add('exit');
+  current = to;
+  slides[to].classList.add('active');
+  slides[to].classList.remove('exit');
+  const sb = slides[to].querySelector('.sb');
+  if (sb) sb.scrollTop = 0;
+  setTimeout(() => slides[from].classList.remove('exit'), 520);
+  update();
+}
+
+document.getElementById('prev').addEventListener('click', () => go(current-1));
+document.getElementById('next').addEventListener('click', () => go(current+1));
+
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight'||e.key==='ArrowDown') go(current+1);
+  if (e.key==='ArrowLeft' ||e.key==='ArrowUp')   go(current-1);
+});
+
+// swipe
+let tx=0, ty=0, sw=false;
+document.addEventListener('touchstart', e => {
+  tx=e.touches[0].clientX; ty=e.touches[0].clientY; sw=false;
+},{passive:true});
+document.addEventListener('touchmove', e => {
+  const dx=Math.abs(e.touches[0].clientX-tx), dy=Math.abs(e.touches[0].clientY-ty);
+  if (dx>dy && dx>10) sw=true;
+},{passive:true});
+document.addEventListener('touchend', e => {
+  if (!sw) return;
+  const dx=e.changedTouches[0].clientX-tx;
+  if (Math.abs(dx)>44) dx<0 ? go(current+1) : go(current-1);
+});
+
+update();
+</script>
+</body>
+</html>
